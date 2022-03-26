@@ -131,7 +131,7 @@ const methods = {
     //Retorna o valor somando-os e fixando duas casas após a virgula
     return (totalValue.reduce((a, b) => a + b) / totalValue.length).toFixed(2);
   },
-  showRankinsBaggers() {
+  showRankinsStudents() {
     const studentsValues = [];
     this.studentsList.forEach((student) =>
       studentsValues.push(student.VL_BOLSISTA_PAGAMENTO)

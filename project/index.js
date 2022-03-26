@@ -113,7 +113,7 @@ function option4(){
         console.clear();
         menu();
       } else {
-        let item = methods.showRankinsBaggers();
+        let item = methods.showRankinsStudents();
         verifyCases(item, option4);
       }
     }
