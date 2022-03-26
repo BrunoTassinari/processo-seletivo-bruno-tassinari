@@ -1,13 +1,15 @@
-import metodos from "./metodos.js";
+import methods from "./methods.js";
 import readline from "readline";
 
-const leitor = readline.createInterface({
+const output = readline.createInterface({
   input: process.stdin,
   output: process.stdout,
 });
 
+menu();
+
 function menu(){
-  return leitor.question(
+  return output.question(
     `
     -----------------------------------
     Qual opção deseja?
@@ -19,8 +21,8 @@ function menu(){
     [5] Sair
     ------------------------------------
     `,
-    function (opcao) {
-      switch (opcao) {
+    function (option) {
+      switch (option) {
         case "1":
           console.clear();
           option1();
@@ -39,7 +41,7 @@ function menu(){
           break;
         case "5":
           console.clear();
-          leitor.close();
+          output.close();
           break;
         default:
           console.clear();
@@ -50,80 +52,79 @@ function menu(){
   );
 };
 
-menu();
-
-const option1 = () => {
-  leitor.question(
+function option1(){
+  output.question(
     "\n [1] Voltar ao menu.\n ======================= \n Informe o ano de pesquisa: ",
-    (ano) => {
-      if (ano == "1") {
+    (year) => {
+      if (year == "1") {
         console.clear();
         menu();
       } else {
-        let item = metodos.filtrarPorAno(ano);
-        verificaCasos(item, option1);
+        let item = methods.filterByYear(year);
+        verifyCases(item, option1);
       }
     }
   );
-};
+}
 
-const option2 = () => {
-  leitor.question(
+function option2(){
+  output.question(
     "\n [1] Voltar ao menu.\n ------------------------------------ \n Informe o nome para pesquisa: ",
     (nome) => {
       let item;
 
       if (nome != "") {
-        item = metodos.codificaNome(nome);
+        item = methods.criptName(nome);
       }
       if (nome == "1") {
         console.clear();
         menu();
       }
-      verificaCasos(item, option2);
+      verifyCases(item, option2);
     }
   );
-};
+}
 
-const option3 = () => {
-  leitor.question(
+function option3(){
+  output.question(
     "\n [1] Voltar ao menu.\n ======================= \n Informe o ano de pesquisa: ",
     (ano) => {
       if (ano == "1") {
         console.clear();
         menu();
       } else {
-        let item = metodos.mediaPorAno(ano);
-        verificaCasos(item, option3);
+        let item = methods.averageYear(ano);
+        verifyCases(item, option3);
       }
     }
   );
-};
+}
 
-const option4 = () => {
-  leitor.question(
+function option4(){
+  output.question(
     "\n [1] Voltar ao menu.\n ======================= \n Pressione qualquer tecla para os resultados: ",
     (reponse) => {
       if (reponse == "1") {
         console.clear();
         menu();
       } else {
-        let item = metodos.mostraRankinsBolsistas();
-        verificaCasos(item, option4);
+        let item = methods.showRankinsBaggers();
+        verifyCases(item, option4);
       }
     }
   );
-};
-const verificaCasos = (retorno, callback) => {
-  if (retorno == undefined) {
+}
+
+function verifyCases(returnItem, callback){
+  if (returnItem == undefined) {
     console.clear();
     console.log("\n ## Não foi localizado nenhum item ou dado inválido ##");
     callback();
   } else {
     console.clear();
     console.log("------------------------------------------------------------");
-    console.log(retorno);
+    console.log(returnItem);
     console.log("------------------------------------------------------------");
     callback();
   }
-};
+}
