@@ -18,7 +18,7 @@ async function menu(){
     [1] Primeiro bolsista do ano
     [2] Busca por nome 
     [3] Media valores do ano
-    [4] Colocação de valores de bolsas
+    [4] Rankings de valores de bolsa
     [5] Sair
     ------------------------------------
     `,

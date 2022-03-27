@@ -166,6 +166,7 @@ const methods = {
     let studentsSmallerValues = orderStudentsWithValues.slice(0, 3);
 
     return {
+      //Necessário o reverse para deixar o maior valor em primeiro
       Maiores_valores: studentsLargerValues.reverse(),
       Menores_valores: studentsSmallerValues,
     };
