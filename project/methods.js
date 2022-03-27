@@ -1,14 +1,16 @@
 import csv from "csvtojson";
 
 const methods = {
-  studentsList: await csv().fromFile("./src/data.csv"),
+  getStudentsListJson: async () => {
+    return await csv().fromFile("./src/data.csv")
+  },
 
-  filterByYear(year) {
+  async filterByYear(year) {
     let studentsFilter = [];
     let selectStudent;
 
     // Recebe todos os bolsistas com o ano de parametro
-    studentsFilter = this.studentsList.filter(student => {
+    studentsFilter = (await this.getStudentsListJson()).filter(student => {
       return student.AN_REFERENCIA == year;
     });
 
@@ -27,15 +29,17 @@ const methods = {
       Valor_bolsa: selectStudent.VL_BOLSISTA_PAGAMENTO,
     };
   },
-  criptName(name) {
+  async criptName(name) {
+    const semAcento = /([\u0300-\u036f]|[^0-9a-zA-Z\s])/g
+
     // Transforma o nome inserido como parametros para um modelo padrao
     let transformedName = name.toUpperCase();
     transformedName = transformedName
       .normalize("NFD")
-      .replace(/([\u0300-\u036f]|[^0-9a-zA-Z\s])/g, "");
+      .replace(semAcento, "");
 
     // Percorre a lista de bolsistas e se no nome do bolsista conter a palavra de parametro, atribui o bolsista a searchStudentByName
-    let searchStudentByName = this.studentsList.filter((student) => {
+    let searchStudentByName = (await this.getStudentsListJson()).filter((student) => {
       let currentStudentName = student.NM_BOLSISTA;
       if (currentStudentName.includes(transformedName)) {
         return student;
@@ -111,11 +115,11 @@ const methods = {
       Valor_bolsa: selectStudent.VL_BOLSISTA_PAGAMENTO,
     };
   },
-  averageYear(year) {
+  async averageYear(year) {
     let totalValue = [];
 
     //Filtra os bolsista que tem o ano referencia igual o ano parametro
-    this.studentsList.filter((student) => {
+    (await this.getStudentsListJson()).filter((student) => {
       if (student.AN_REFERENCIA == parseInt(year)) {
         //Passa para numeros o valor pagamento do bolsista e atribui a totalValue
         let numItem = Number(student.VL_BOLSISTA_PAGAMENTO);
@@ -131,9 +135,12 @@ const methods = {
     //Retorna o valor somando-os e fixando duas casas após a virgula
     return (totalValue.reduce((a, b) => a + b) / totalValue.length).toFixed(2);
   },
-  showRankinsStudents() {
+  async showRankingsStudents() {
+
+    const studentList = await this.getStudentsListJson();
+
     const studentsValues = [];
-    this.studentsList.forEach((student) =>
+    studentList.forEach((student) =>
       studentsValues.push(student.VL_BOLSISTA_PAGAMENTO)
     );
 
@@ -148,7 +155,7 @@ const methods = {
     // Pega o vetor de valores unicos e procura o primeiro elemento dentro de studentsList que satisfazer, quando ocorrer, atribui a orderStudentsWithValues
     orderValues.forEach((value) => {
       orderStudentsWithValues.push(
-        this.studentsList.find(
+        studentList.find(
           (student) => student.VL_BOLSISTA_PAGAMENTO == value
         )
       );
@@ -159,10 +166,12 @@ const methods = {
     let studentsSmallerValues = orderStudentsWithValues.slice(0, 3);
 
     return {
-      Maiores_valores: studentsLargerValues,
+      Maiores_valores: studentsLargerValues.reverse(),
       Menores_valores: studentsSmallerValues,
     };
   },
 };
 
 export default methods;
+
+
